@@ -83,8 +83,6 @@ Example request body:
         "password": "password"
 }
 ```
-- `POST api/auth/refresh`: Refresh the authentication token.
-- `GET api/auth/me`: Get the authenticated user's information.
 
 #### Products
 
