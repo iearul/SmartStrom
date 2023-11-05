@@ -11,10 +11,10 @@ module.exports = {
     logging: console.log,
   },
   test: {
-    username: "root",
+    username: "iearul",
     password: "root",
     database: "tariff",
-    host: "127.0.0.1",
+    host: "localhost",
     port: 3306,
     dialect: "mysql",
     logging: false,

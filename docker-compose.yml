@@ -6,15 +6,18 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
+    entrypoint: [ "/bin/sh", "-c", "/bin/startup.sh" ]
     networks:
       - my-network
+    restart: on-failure
 
   frontend:
     build:
       context: ./frontend
     ports:
-      - "80:80"
+      - "4200:80"
     networks:
       - my-network
 
@@ -26,8 +29,22 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: tariff
-      MYSQL_USER: root
+      MYSQL_USER: iearul
       MYSQL_PASSWORD: root
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-uiearul",
+          "-proot"
+        ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
     networks:
       - my-network
 

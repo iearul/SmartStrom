@@ -8,7 +8,7 @@ module.exports = {
     let salt = generateSalt();
     const adminUser = {
       email: 'admin@mail.com',
-      password: generateSecuredHash('AdminPwd@123', salt),
+      password: generateSecuredHash('password', salt),
       salt: salt,
       role: 'Admin',
       created_at: new Date(),

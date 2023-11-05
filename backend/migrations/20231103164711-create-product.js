@@ -34,27 +34,27 @@ module.exports = {
       },
     });
 
-    // await queryInterface.bulkInsert('products', [
-    //   {
-    //     name: 'Product A',
-    //     type: 1,
-    //     included_kwh: null, // Adjust this as needed
-    //     base_cost: 5,
-    //     additional_kwh_cost: 22,
-    //     created_at: new Date(),
-    //     updated_at: new Date(),
-    //   },
-    //   {
-    //     name: 'Product B',
-    //     type: 2,
-    //     included_kwh: 4000,
-    //     base_cost: 800,
-    //     additional_kwh_cost: 30,
-    //     created_at: new Date(),
-    //     updated_at: new Date(),
-    //   },
-    // ]);
-      
+    await queryInterface.bulkInsert('products', [
+      {
+        name: 'Product A',
+        type: 1,
+        included_kwh: null, // Adjust this as needed
+        base_cost: 5,
+        additional_kwh_cost: 22,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        name: 'Product B',
+        type: 2,
+        included_kwh: 4000,
+        base_cost: 800,
+        additional_kwh_cost: 30,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ]);
+
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('products');

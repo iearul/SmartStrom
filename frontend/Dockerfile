@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:14 as builder
+FROM node:lts-buster as builder
 
 # Set the working directory in the container
 WORKDIR /app
@@ -20,10 +20,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy the built Angular app from the previous stage
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Expose the port that Nginx will run on (usually 80)
-EXPOSE 80
+COPY --from=builder /app/dist/tariff-calculator /usr/share/nginx/html
 
 # The Nginx process is run by default
 CMD ["nginx", "-g", "daemon off;"]

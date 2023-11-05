@@ -8,47 +8,47 @@ require("dotenv").config();
 
 router.get('/calculate-cost', async (req, res) => {
 
-    const consumption = parseInt(req.query.consumption, 10);
-    if (isNaN(consumption)) {
-      return res.status(400).json({ error: 'Invalid consumption value' });
-    }
-  
-    try {
-      const tariffs = await models.Product.findAll();
+  const consumption = parseInt(req.query.consumption, 10);
+  if (isNaN(consumption)) {
+    return res.status(400).json({ error: 'Invalid consumption value' });
+  }
 
-      const results = tariffs.map((tariff) => ({
-        name: tariff.name,
-        type: tariff.type,
-        included_kwh: tariff.included_kwh,
-        base_cost: tariff.base_cost,
-        additional_kwh_cost: tariff.additional_kwh_cost,
+  try {
+    const tariffs = await models.Product.findAll();
 
-        annualCost: calculateAnnualCosts(consumption, tariff),
-      }));
-  
-      res.status(200).json({status:1, data:results});
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ status: 0 , error: 'Internal server error' });
-    }
+    const results = tariffs.map((tariff) => ({
+      name: tariff.name,
+      type: tariff.type,
+      included_kwh: tariff.included_kwh,
+      base_cost: tariff.base_cost,
+      additional_kwh_cost: tariff.additional_kwh_cost,
+      annualCost: calculateAnnualCosts(consumption, tariff),
+      monthlyCost: (calculateAnnualCosts(consumption, tariff) / 12).toFixed(2),
+    }));
+
+    res.status(200).json({ status: 1, data: results });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: 0, error: 'Internal server error' });
+  }
 });
 
 function calculateAnnualCosts(consumption, tariff) {
-    if (tariff.type === 1) {
-      const baseCost = tariff.base_cost * 12;
-      const consumptionCost = (tariff.additional_kwh_cost * consumption)/100;
-      return baseCost + consumptionCost;
-    } 
-    else if (tariff.type === 2) {
-      if (consumption <= tariff.included_kwh) {
-        return tariff.base_cost;
-      } 
-      else {
-        const extraConsumption = consumption - tariff.included_kwh;
-        return tariff.base_cost + (extraConsumption * tariff.additional_kwh_cost)/100;
-      }
+  if (tariff.type === 1) {
+    const baseCost = tariff.base_cost * 12;
+    const consumptionCost = (tariff.additional_kwh_cost * consumption) / 100;
+    return baseCost + consumptionCost;
+  }
+  else if (tariff.type === 2) {
+    if (consumption <= tariff.included_kwh) {
+      return tariff.base_cost;
     }
-    return 0; // Default to 0 for unknown tariff types
+    else {
+      const extraConsumption = consumption - tariff.included_kwh;
+      return tariff.base_cost + (extraConsumption * tariff.additional_kwh_cost) / 100;
+    }
+  }
+  return 0; // Default to 0 for unknown tariff types
 }
 
 router.post('/insert-product', VerifyToken, async (req, res) => {
@@ -73,7 +73,7 @@ router.post('/insert-product', VerifyToken, async (req, res) => {
       updated_at: new Date(),
     });
 
-    res.status(200).json({status:1,data:product});
+    res.status(200).json({ status: 1, data: product });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
