@@ -1,0 +1,52 @@
+<app-header></app-header>
+
+<div class="d-flex justify-content-center mt-3">
+  <p-card subheader="Enter yearly consumption to get products comparison">
+    <div class="p-inputgroup">
+      <p-inputNumber 
+        placeholder="Consumption"
+        [(ngModel)]="consumption" 
+        inputId="minmax" 
+        mode="decimal" 
+        [min]="1" [max]="99999999"
+      >
+      </p-inputNumber>
+      <span class="p-inputgroup-addon">kWh/year</span>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <p-button label="Submit" (click)="getTariffs()"
+      >
+      </p-button>
+    </div>
+  </p-card>
+</div>
+
+<div class="row m-4">
+  <div *ngFor="let product of data" class="col-md-4 mb-3">
+    <p-card [header]="product.name" [subheader]="product.type == 1 ? 'Type 1 - Basic electricity tariff' : 'Type 2 - Packaged tariff'" [style]="{ 'max-width': '500px' }">
+      <div class="d-flex justify-content-between">
+        <div class="p-grid">
+          <div class="p-col-12 mb-1">
+            <p-tag severity="success" value="Base Cost : {{ product.base_cost }}"></p-tag>
+          </div>
+          <div class="p-col-12 mb-1">
+            <p-tag value="Included kWh : {{ product.included_kwh || 'N/A' }}"></p-tag>
+          </div>
+          <div class="p-col-12 mb-1">
+            <p-tag severity="warning" value="Add. kWh Cost : {{ product.additional_kwh_cost }}"></p-tag>
+          </div>
+        </div>
+        <p-divider layout="vertical"></p-divider>
+        <div>
+          <div class="d-flex">
+            <h1>{{ product.annualCost }}</h1>
+            <h3 class="ml-2 mt-2">€</h3>
+          </div>
+          <p-tag icon="pi pi-euro" [rounded]="true" severity="danger" value="Annual Cost"></p-tag>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
+
+<p-toast></p-toast>
