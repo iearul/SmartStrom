@@ -50,7 +50,7 @@ If you prefer to run the entire project with Docker:
 4. Run the following command to build the containers: `docker-compose up`
 5. To start the containers: `docker-compose start`
 6. The frontend will be accessible at [http://localhost:4200](http://localhost:4200).
-7. To stop the Docker containers: `docker-compose down`
+7. To stop the Docker containers: `docker-compose stop`
 
 
 ## Usage
@@ -79,7 +79,7 @@ Example request body:
 
 ```json
 {
-        "email": "admin@email.com",
+        "email": "admin@mail.com",
         "password": "password"
 }
 ```
